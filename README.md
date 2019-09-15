@@ -1,8 +1,10 @@
 Various Nothke's DOTS Gotchas
 
-### Use my snippets
+## My VS DOTS snippets
 
-### Creating a renderable mesh entity
+Check out my snippets https://github.com/nothke/Unity-VS-Code-Snippets, which include quick-creating templates for systems, jobs, parallel jobs and more..
+
+## Creating a renderable mesh entity
 
 The entity archetype must at least contain:
 - RenderMesh (from Unity.Rendering, found in "Hybrid Rendering" package)
@@ -40,7 +42,7 @@ manager.SetComponentData(entity, new Translation() { Value = myPosition });
 ```
 
 
-### Destroying Entites from within a job
+## Destroying Entites from within a job
 
 Since entities can be only created on the main thread, their destruction must be deferred until the job completes. You can issue a command to destroy an entity using EntityCommandBuffer. The EntityCommandBuffer can be obtained from one of the EntityCommandBufferSystems (start typing EntityCommandBufferSystems, and you will get a bunch). You can obtain the system from World in OnCreateManager.
 
@@ -78,7 +80,7 @@ Note: In the Unity example, the "index" provided to the EntityCommandBuffer is t
 
 Example: https://github.com/Unity-Technologies/EntityComponentSystemSamples/blob/master/ECSSamples/Assets/HelloCube/7.%20SpawnAndRemove/SpawnerSystem_SpawnAndRemove.cs
 
-### Running a system only on entities that contain a component, aka tagging
+## Running a system only on entities that contain a component, aka tagging
 
 Since a certain ECS update, it is no longer recommended to include a component into a system if you are not using its data, that is, just for the sake of "tagging".
 
