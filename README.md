@@ -4,7 +4,7 @@ Correct as of: 9/15/2019
 
 ## Be careful about obsolete resources
 
-As DOTS are still work in progress, a lot of things in code are being changed. The biggest problem is that there are loads of resources and tutorials showing obsolete ways of doing things, which are just not valid anymore. Check [this page on Unity forums for a list of deprecated things](https://forum.unity.com/threads/api-deprecation-faq-0-0-23.636994/).
+As DOTS is still in development, it is susceptible to frequent changes. The biggest problem however is that there are loads of resources and tutorials online showing no longer valid ways of doing things. Check [this page on Unity forums for a list of some of deprecated features](https://forum.unity.com/threads/api-deprecation-faq-0-0-23.636994/). If you encounter any of these, you are likely looking at an old tutorial.
 
 ## My VS DOTS snippets
 
@@ -202,3 +202,7 @@ Instead, I had to use the out parameter to accomplish the same:
 public static void GetCoord(int index, out int x, out int y)
 ```
 I am not sure if it works by explicitly setting the layout (if that can even be done with C# tuples?). Alternatively you can always use a custom struct.
+
+## Force ForEach system to run on a single thread
+
+Use `job.ScheduleSingle(this, inputDeps);`
