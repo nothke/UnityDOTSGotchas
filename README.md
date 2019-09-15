@@ -201,4 +201,4 @@ Instead, I had to use the out parameter to accomplish the same:
 ```
 public static void GetCoord(int index, out int x, out int y)
 ```
-I am not sure if it works by explicitly layout setting (if that can be done with C# tuples) or it just requires using a custom struct.
+I am not sure if it works by explicitly setting the layout (if that can even be done with C# tuples?). Alternatively you can always use a custom struct.
