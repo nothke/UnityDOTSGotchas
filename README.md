@@ -93,3 +93,9 @@ Alternatively, you can still pass data as tag, but use `[ReadOnly] ref SomeCompo
 ## Don't automatically start a system on start
 
 Add `[DisableAutoCreation]` to the top of the system class.
+
+## Parallel writing to a NativeArray
+
+Parallel writing is by default not allowed because of the race conditions of writing to the same index and Unity safety system will warn if you try to prallel write and will instead force the execution to not be parallel. 
+
+BUT, you CAN write to an array in parallel if you make sure that you don't write to the same index, and you need to add `[NativeDisableParallelForRestriction]` in front of the NativeArray. Same goes for ComponentDataFromEntity and other collections. Note that you will now not be warned even if you are writing to the same spot, so, be very careful.
