@@ -46,9 +46,9 @@ manager.SetComponentData(entity, new Translation() { Value = myPosition });
 
 You should now have a visible object in game!
 
-## Destroying Entites from within a job
+## Creating or destroying Entites from within a JobComponentSystem
 
-Since entities can only be created on the main thread, their destruction must be deferred until the job completes. You can issue a command to destroy an entity using EntityCommandBuffer. The EntityCommandBuffer can be obtained from one of the EntityCommandBufferSystems (start typing EntityCommandBufferSystems, and you will get a bunch). You can obtain the system from World in OnCreateManager.
+Since entities can only be created/destroyed on the main thread, their construction/destruction must be deferred until the job completes. You can issue a command to destroy an entity using an EntityCommandBuffer. The EntityCommandBuffer can be obtained from one of the EntityCommandBufferSystems (start typing EntityCommandBufferSystems, and you will get a bunch). You can obtain the system from World in OnCreateManager.
 
 ```
 EndSimulationEntityCommandBufferSystem commandBufferSystem;
@@ -157,4 +157,4 @@ In the System's Job, we can now get data by indexing the `ComponentDataFromEntit
     }
 ```
 
-You can also mark as ReadOnly if you want to only read, making the operation more optimized.
+You can also mark as ReadOnly if you want to only read, making the job potentially faster.
