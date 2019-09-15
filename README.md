@@ -2,6 +2,11 @@ Various Nothke's DOTS Gotchas
 
 Correct as of: 9/15/2019
 
+## Be careful about obsolete resources
+
+As DOTS are still work in progress, a lot of things in code are being changed, which also includes tutorials. Loads of online tutorials will show obsolete ways of doing things, which are just not valid anymore. Here is a few things you should watch out for when surfing the internetz:
+- [Inject] has been deprecated. If you see Inject in any resource it's old.
+
 ## My VS DOTS snippets
 
 Check out my snippets https://github.com/nothke/Unity-VS-Code-Snippets, which include quick-creating templates for systems, jobs, parallel jobs and more..
