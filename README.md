@@ -11,6 +11,32 @@ As DOTS are still work in progress, a lot of things in code are being changed. T
 
 Check out my snippets https://github.com/nothke/Unity-VS-Code-Snippets, which include quick-creating templates for systems, jobs, parallel jobs and more..
 
+## Mathematics as a using static
+
+It is useful to include Mathematics library as
+```
+using Unity.Mathematics;
+using static Unity.Mathematics.math;
+```
+Because we can then create data by calling creation methods like `float3 position = float3(0,0,0)` without using the "new" keyword. This is beneficial because it is very similar to how it is written in shader code. As a matter of fact you can literally just copy the code to a HLSL function and it will behave in the same way.
+
+## Mathematics swizzling
+
+There is a hidden feature (doesn't show up in VS autocomplete) in Mathematics library commonly refered to as "swizzling", where you can swap or convert values very easily, siilar how it's done in HLSL code.
+
+A common swizzling example is when you want to convert 3D position into a horizontal 2D vector, so you want to put x and z into a float2's x and y:
+```
+float3 pos3d = float3(1, 2, 3);
+float2 pos2d = pos3d.xz;
+// pos2d is now (1, 3);
+```
+You can also move values around like:
+```
+float4 vector = float4(1, 2, 3, 4);
+vector.xw = vector.yz;
+// vector is now (2, 2, 3, 3);
+```
+
 ## Creating a renderable mesh entity
 
 The entity archetype must at least contain:
@@ -27,7 +53,9 @@ Important!: Material provided to the MeshRender must be GPU instanced (tick GPU 
 
 Create the archetype and RenderMesh at start:
 ```
-EntityArchetype myRenderableArchetype = World.Active.EntityManager.CreateArchetype(
+var manager = World.Active.EntityManager;
+
+EntityArchetype myRenderableArchetype = manager.CreateArchetype(
     typeof(RenderMesh),
     typeof(LocalToWorld),
     
@@ -43,7 +71,7 @@ RenderMesh myRenderMesh = new RenderMesh()
 Then, create the entity and add components:
 
 ```
-var entity = World.Active.EntityManager.CreateEntity(particleArch);
+var entity = manager.CreateEntity(particleArch);
 
 manager.SetSharedComponentData(entity, myRenderMesh);
 manager.SetComponentData(entity, new Translation() { Value = myPosition });
