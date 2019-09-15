@@ -98,22 +98,26 @@ Add `[DisableAutoCreation]` to the top of the system class.
 
 ## Parallel writing to a NativeArray
 
-Parallel writing is by default not allowed because of the race conditions of writing to the same index and Unity safety system will warn if you try to prallel write and will instead force the execution to not be parallel. 
+Parallel writing is by default not allowed because of the race conditions of writing to the same index and Unity safety system will warn if you try to parallel write and will instead force single-threading.
 
-BUT, you CAN write to an array in parallel if you make sure that you don't write to the same index, and you need to add `[NativeDisableParallelForRestriction]` in front of the NativeArray. Same goes for ComponentDataFromEntity and other collections. Note that you will now not be warned even if you are writing to the same spot, so, be very careful.
+BUT, you CAN write to an array in parallel if you make sure that you don't write to the same index. To do that you need to add `[NativeDisableParallelForRestriction]` in front of the NativeArray. Same goes for ComponentDataFromEntity and other collections. Note that you will now not be warned even if you are writing to the same spot, so, be very careful.
 
 ## Trasfering data from entity to entity
 
-You can get an array of component datas indexed by entity in a system using `GetComponentDataFromEntity<MyData>()`. By storing So you can use this to take data from one entity data to the other.
+Lets say we want to share transfer some data from one entity to the other. First, we need to reference an entity in another entity. Then, you can get a `ComponentDataFromEntity<>` which is an array of component datas indexed by entity in a system using `GetComponentDataFromEntity<MyData>()`. You can use this to take data, pointed to by our stored Entity, from one entity to the other.
 
-For example lets say we have:
+For example, we have a component data:
 
 ```
 public struct MyData : IComponentData
 {
     public float value;
 }
+```
 
+..and we want to add to it's value from another entity. We create another component data that stores the linked entity and the amount we want to transfer:
+
+```
 public struct MyTransferingData : IComponentData
 {
 	public Entity entity;
@@ -121,11 +125,11 @@ public struct MyTransferingData : IComponentData
 }
 ```
 
-System OnUpdate:
+In system OnUpdate we can fetch `ComponentDataFromEntity<MyData>`:
 ```
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        var myDatas = GetComponentDataFromEntity<TileData>(false);
+        var myDatas = GetComponentDataFromEntity<MyData>();
 
         var job = new SystemJob()
         {
@@ -136,7 +140,7 @@ System OnUpdate:
     }
 ```
 
-The System's Job:
+In the System's Job, we can now get data by indexing the `ComponentDataFromEntity<MyData>`:
 ```
     [BurstCompile]
     struct SystemJob : IJobForEach<MyTransferingData>
