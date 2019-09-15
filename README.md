@@ -190,3 +190,15 @@ In the System's Job, we can now get data by indexing the `ComponentDataFromEntit
 ```
 
 You can also mark as ReadOnly if you want to only read, making the job potentially faster.
+
+## Tuples with auto layout are not supported by Burst
+
+I've encountered this error when trying to return a tuple, for example:
+```
+public static (int, int) GetCoord(int index)
+```
+Instead, I had to use the out parameter to accomplish the same:
+```
+public static void GetCoord(int index, out int x, out int y)
+```
+I am not sure if it works by explicitly layout setting (if that can be done with C# tuples) or it just requires using a custom struct.
