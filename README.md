@@ -1,5 +1,7 @@
 Various Nothke's DOTS Gotchas
 
+Correct as of: 9/15/2019
+
 ## My VS DOTS snippets
 
 Check out my snippets https://github.com/nothke/Unity-VS-Code-Snippets, which include quick-creating templates for systems, jobs, parallel jobs and more..
@@ -99,3 +101,56 @@ Add `[DisableAutoCreation]` to the top of the system class.
 Parallel writing is by default not allowed because of the race conditions of writing to the same index and Unity safety system will warn if you try to prallel write and will instead force the execution to not be parallel. 
 
 BUT, you CAN write to an array in parallel if you make sure that you don't write to the same index, and you need to add `[NativeDisableParallelForRestriction]` in front of the NativeArray. Same goes for ComponentDataFromEntity and other collections. Note that you will now not be warned even if you are writing to the same spot, so, be very careful.
+
+## Trasfering data from entity to entity
+
+You can get an array of component datas indexed by entity in a system using `GetComponentDataFromEntity<MyData>()`. By storing So you can use this to take data from one entity data to the other.
+
+For example lets say we have:
+
+```
+public struct MyData : IComponentData
+{
+    public float value;
+}
+
+public struct MyTransferingData : IComponentData
+{
+	public Entity entity;
+	public float transferAmount;
+}
+```
+
+System OnUpdate:
+```
+    protected override JobHandle OnUpdate(JobHandle inputDeps)
+    {
+        var myDatas = GetComponentDataFromEntity<TileData>(false);
+
+        var job = new SystemJob()
+        {
+            myDatas = myDatas
+        };
+
+        return job.Schedule(this, inputDeps);
+    }
+```
+
+The System's Job:
+```
+    [BurstCompile]
+    struct SystemJob : IJobForEach<MyTransferingData>
+    {
+        [NativeDisableParallelForRestriction] // So we can parallel write
+        public ComponentDataFromEntity<TileData> myDatas;
+
+        public void Execute(ref MyTransferingData transfer)
+        {
+            var myDatas = tileDatas[transfer.entity];
+            myDatas.value += transfer.dataToTransfer; // Where we add the value
+            myDatas[transfer.entity] = tileData;
+        }
+    }
+```
+
+You can also mark as ReadOnly if you want to only read, making the operation more optimized.
