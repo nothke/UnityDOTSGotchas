@@ -1,4 +1,4 @@
-Various Nothke's DOTS Gotchas
+Various Nothke's DOTS gotchas. These are random and in no particular order, also used as a little cheatsheet. Hopefully, someone will find it useful.
 
 Correct as of: 9/15/2019
 
@@ -109,7 +109,7 @@ BUT, you CAN write to an array in parallel if you make sure that you don't write
 
 ## Trasfering data from entity to entity
 
-Lets say we want to share transfer some data from one entity to the other. First, we need to reference an entity in another entity. Then, you can get a `ComponentDataFromEntity<>` which is an array of component datas indexed by entity in a system using `GetComponentDataFromEntity<MyData>()`. You can use this to take data, pointed to by our stored Entity, from one entity to the other.
+Lets say we want to transfer some data from one entity to the other. First, we need to reference an entity in another entity. Then, you can get a `ComponentDataFromEntity<>` which is an array of component datas indexed by entity in a system using `GetComponentDataFromEntity<MyData>()`. You can use this to take data, pointed to by our stored Entity, from one entity to the other.
 
 For example, we have a component data:
 
