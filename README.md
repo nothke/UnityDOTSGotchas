@@ -89,3 +89,7 @@ Since a certain Unity.Entities update, it is no longer recommended to include a 
 Instead, put `[RequireComponentTag(typeof(SomeComponentIRequire))]` above the system's job.
 
 Alternatively, you can still pass data as tag, but use `[ReadOnly] ref SomeComponentIRequire` in Execute parameter.
+
+## Don't automatically start a system on start
+
+Add `[DisableAutoCreation]` to the top of the system class.
