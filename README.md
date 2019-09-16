@@ -21,16 +21,14 @@ Because we can then create data by calling creation methods like `float3 positio
 
 ## Mathematics swizzling
 
-There is a hidden feature (doesn't show up in VS autocomplete) in Mathematics library commonly refered to as "swizzling", where you can swap or convert values very easily, siilar how it's done in HLSL code.
+There is a hidden feature (doesn't show up in VS autocomplete) in Mathematics library commonly refered to as "swizzling", where you can swap or convert values very easily, similar to how it's done in HLSL code.
 
 A common swizzling example is when you want to convert 3D position into a horizontal 2D vector, so you want to put x and z into a float2's x and y:
 ```
 float3 pos3d = float3(1, 2, 3);
 float2 pos2d = pos3d.xz;
 // pos2d is now (1, 3);
-```
-You can also move values around like:
-```
+
 float4 vector = float4(1, 2, 3, 4);
 vector.xw = vector.yz;
 // vector is now (2, 2, 3, 3);
