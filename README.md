@@ -211,9 +211,9 @@ You may notice that when starting the game in editor with ECS systems you encoun
 
 You can force Unity to compile Burst code ahead of time by using `[BurstCompile(CompileSynchronously = true)]`, but I personally recommend not doing that as it is better to have a shorter time of entering the play mode.
 
-But note that this only happens in editor! Rest assured, this will not happen in build, all burst code is compiled ahead of time.
+But note that this only happens in editor! Rest assured, this will not happen in build, all burst code is compiled during the build process.
 
 ## Plenty of GC Allocations each frame when using ECS/Jobs
 
 When using jobs or ECS you may notice a high amount of GC Allocations. There could be several reasons for that:
-- Unity uses a managed object called a [DisposeSentinel](https://docs.unity3d.com/ScriptReference/Unity.Collections.LowLevel.Unsafe.DisposeSentinel.html) to track the native collection's lifetime. It is producing GC allocations when creating/disposing native collections. That is the expected behavior as the DisposeSentinels helps you track issues and memory leaks. Leak checks are by default not being tracked in build. You can also set Jobs > Leak Detection to off to turn it off in editor.
+- Unity uses a managed object called a [DisposeSentinel](https://docs.unity3d.com/ScriptReference/Unity.Collections.LowLevel.Unsafe.DisposeSentinel.html) to track the native collection's lifetime. It is producing GC allocations when creating/disposing native collections. That is the expected behavior as the DisposeSentinel helps you track issues and memory leaks. Leak checks are by default not being tracked in build, therefore there won't be any DisposeSentinels nor GC allocations. You can also set Jobs > Leak Detection to off to turn it off in editor.
