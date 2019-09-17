@@ -21,7 +21,7 @@ Because we can then create data by calling creation methods like `float3 positio
 
 ## Mathematics swizzling
 
-There is a hidden feature (doesn't show up in VS autocomplete) in Mathematics library commonly refered to as "swizzling", where you can swap or convert values very easily, similar to how it's done in HLSL code.
+There is a hidden feature (doesn't show up in VS auto complete) in Mathematics library commonly referred to as "swizzling", where you can swap or convert values very easily, similar to how it's done in HLSL code.
 
 A common swizzling example is when you want to convert 3D position into a horizontal 2D vector, so you want to put x and z into a float2's x and y:
 ```
@@ -76,7 +76,7 @@ manager.SetComponentData(entity, new Translation() { Value = myPosition });
 
 You should now have a visible object in game!
 
-## Creating or destroying Entites from within a JobComponentSystem
+## Creating or destroying Entities from within a JobComponentSystem
 
 Since entities can only be created/destroyed on the main thread, their construction/destruction must be deferred until the job completes. You can issue a command to destroy an entity using an EntityCommandBuffer. The EntityCommandBuffer can be obtained from one of the EntityCommandBufferSystems (start typing EntityCommandBufferSystems, and you will get a bunch). You can obtain the system from World in OnCreateManager.
 
@@ -132,7 +132,7 @@ Parallel writing is by default not allowed because of the race conditions of wri
 
 BUT, you CAN write to an array in parallel if you make sure that you don't write to the same index. To do that you need to add `[NativeDisableParallelForRestriction]` in front of the NativeArray. Same goes for ComponentDataFromEntity and other collections. Note that you will now not be warned even if you are writing to the same spot, so, be very careful.
 
-## Trasfering data from entity to entity
+## Transferring data from entity to entity
 
 Lets say we want to transfer some data from one entity to the other. First, we need to reference an entity in another entity. Then, you can get a `ComponentDataFromEntity<>` which is an array of component datas indexed by entity in a system using `GetComponentDataFromEntity<MyData>()`. You can use this to take data, pointed to by our stored Entity, from one entity to the other.
 
@@ -204,3 +204,16 @@ I am not sure if it works by explicitly setting the layout (if that can even be 
 ## Force ForEach system to run on a single thread
 
 Use `job.ScheduleSingle(this, inputDeps);`
+
+## Slowdown on start (Burst compilation)
+
+You may notice that when starting the game in editor with ECS systems you encounter a few stutters that can last up to several seconds until the game starts running smoothly. This is because Unity compiles Burst code asynchronously every time you enter the play mode. Until the burst native code is ready, jobs will be run without burst.
+
+You can force Unity to compile Burst code ahead of time by using `[BurstCompile(CompileSynchronously = true)]`, but I personally recommend not doing that as it is better to have a shorter time of entering the play mode.
+
+But note that this only happens in editor! Rest assured, this will not happen in build, all burst code is compiled ahead of time.
+
+## Plenty of GC Allocations each frame when using ECS/Jobs
+
+When using jobs or ECS you may notice a high amount of GC Allocations. There could be several reasons for that:
+- Unity uses a managed object called a [DisposeSentinel](https://docs.unity3d.com/ScriptReference/Unity.Collections.LowLevel.Unsafe.DisposeSentinel.html) to track the native collection's lifetime. It is producing GC allocations when creating/disposing native collections. That is the expected behavior as the DisposeSentinels helps you track issues and memory leaks. Leak checks are by default not being tracked in build. You can also set Jobs > Leak Detection to off to turn it off in editor.
