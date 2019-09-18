@@ -217,3 +217,28 @@ But note that this only happens in editor! Rest assured, this will not happen in
 
 When using jobs or ECS you may notice a high amount of GC Allocations. There could be several reasons for that:
 - Unity uses a managed object called a [DisposeSentinel](https://docs.unity3d.com/ScriptReference/Unity.Collections.LowLevel.Unsafe.DisposeSentinel.html) to track the native collection's lifetime. It is producing GC allocations when creating/disposing native collections. That is the expected behavior as the DisposeSentinel helps you track issues and memory leaks. Leak checks are by default not being tracked in build, therefore there won't be any DisposeSentinels nor GC allocations. You can also set Jobs > Leak Detection to off to turn it off in editor.
+
+## Returning a single value from a Job
+
+The only thing that "survives" a job are native collections, so if you want to return a value from a job, even if it's a single one, you must wrap it in a NativeArray.
+
+For example, job for calculating a mean value might look like this:
+```
+public struct CalculateMeanValue : IJob
+{
+    [ReadOnly] public NativeArray<float> values;
+    // This will be the NativeArray with a single element:
+    [WriteOnly] public NativeArray<float> output;
+
+    public void Execute()
+    {
+        float total = 0;
+        for (int i = 0; i < values.Length; i++)
+            total += values[i];
+
+        output[0] = total / values.Length;
+    }
+}
+```
+
+You can even wrap BlobAssetReference into a NativeArray to return it, for example to build a Unity.Physics.Collider inside a job.
