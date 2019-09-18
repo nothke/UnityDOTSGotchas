@@ -245,3 +245,9 @@ public struct CalculateMeanValue : IJob
 ```
 
 You can even wrap BlobAssetReference into a NativeArray to return it, for example to build a Unity.Physics.Collider inside a job.
+
+## Game fails to build with CreateEntity/AddComponent EntityCommandBuffer job
+
+Creating entities/adding components is currently not supported by the Burst compiler. If you wish to add CreateEntity/AddComponent commands to the EntityCommandBuffer in a job, you should not `[BurstCompile]` it.
+
+^ To be changed in the next Burst version.
