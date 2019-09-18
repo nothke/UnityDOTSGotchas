@@ -89,13 +89,16 @@ protected override void OnCreate()
 }
 ```
 
-Then, pass the command buffer to the job in OnUpdate
+Then, pass the command buffer to the job in OnUpdate. EDIT: Also, we need to tell the barrier system which job is using the command buffer so it can wait for it to finish.
 
 ```
-var job = new SystemJob()
+var handle = new SystemJob()
 {
     ecb = commandBufferSystem.CreateCommandBuffer().ToConcurrent();
-};
+}.Schedule(this, inputDeps);
+
+// Tell the barrier system which job is using the ecb so it can complete it.
+commandBufferSystem.AddJobHandleForProducer(handle);
 ```
 
 The job must be IJobForEachWithEntity (since we need the entity) and should have:
