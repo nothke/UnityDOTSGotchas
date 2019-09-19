@@ -135,7 +135,7 @@ If you wish to prevent ALL systems from automatically starting, you can add `UNI
 
 ## Manual system start
 
-If you wish to add systems to your world manually (considering [they are not auto-started](#don't-automatically-start-a-system-on-start)), first you need to put them in a system group, and then add them to the update list.
+If you wish to add systems to your world manually (considering [they are not auto-started](#dont-automatically-start-a-system-on-start)), first you need to put them in a system group, and then add them to the update list.
 
 Example:
 
