@@ -127,7 +127,23 @@ Alternatively, you can still pass data as tag, but use `[ReadOnly] ref SomeCompo
 
 ## Don't automatically start a system on start
 
-Add `[DisableAutoCreation]` to the top of the system class.
+If you wish to prevent SOME systems from automatically starting, you can add `[DisableAutoCreation]` to the top of the system class.
+
+If you wish to prevent ALL systems from automatically starting, you can add `UNITY_DISABLE_AUTOMATIC_SYSTEM_BOOTSTRAP` to your Project Settings > Player > Scripting Defines Symbols.
+
+## Manual system start
+
+If you wish to add systems to your world manually (considering [they are not auto-started](#don't-automatically-start-a-system-on-start)), first you need to put them in a system group, and then add them to the update list.
+
+Example:
+
+```
+group = World.Active.GetOrCreateSystem<SimulationSystemGroup>();
+var mySystem = World.Active.GetOrCreateSystem(typeof(MySystem));
+group.AddSystemToUpdateList(mySystem);
+```
+
+This will now run at every invocation of the group's Update, respecting the [UpdateAfter/Before] sorting, just as if it was automatically started.
 
 ## Parallel writing to a NativeArray
 
