@@ -1,6 +1,6 @@
 Various Nothke's DOTS gotchas. These are random and in no particular order, also used as a little cheatsheet. Hopefully, someone will find it useful.
 
-Correct as of: 9/15/2019
+Correct as of: 9/19/2019
 
 ## Be careful about obsolete resources
 
@@ -267,3 +267,22 @@ You can even wrap BlobAssetReference into a NativeArray to return it, for exampl
 Creating entities/adding components is currently not supported by the Burst compiler. If you wish to add CreateEntity/AddComponent commands to the EntityCommandBuffer in a job, you should not `[BurstCompile]` it.
 
 ^ To be changed in the next Burst version.
+
+## Dispose collections after the job has completed
+
+Lets say we have a NativeArray with `Allocator.TempJob`, and we wish to dispose it when the job has completed, you can add a `[DeallocateOnJobCompletion]` on collection's definition inside a job. This is especially useful in systems since we don't know when the system's job will end.
+
+Example:
+```
+public struct MyJob : IJobParallelFor
+{
+    [DeallocateOnJobCompletion]
+    [ReadOnly] NativeArray<float> readFromThisArray;
+
+    public void Execute(int i)
+    {
+    	float value = readFromThisArray[i];
+        // Do something...
+    }
+}
+```
