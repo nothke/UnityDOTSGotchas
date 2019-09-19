@@ -8,6 +8,8 @@ As DOTS is still in development, it is susceptible to frequent changes. The bigg
 
 ## My VS DOTS snippets
 
+(Warning: They are not updated to latest version of ECS! Will do that soon!)
+
 Check out my snippets https://github.com/nothke/Unity-VS-Code-Snippets, which include quick-creating templates for systems, jobs, parallel jobs and more..
 
 ## Mathematics as a using static
