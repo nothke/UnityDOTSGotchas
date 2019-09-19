@@ -288,3 +288,11 @@ public struct MyJob : IJobParallelFor
     }
 }
 ```
+
+## Unity Physics causes an InvalidCastException in Entity Debugger
+
+Will probably be fixed, but in the meantime..
+
+Add `"com.unity.properties": "0.6.4-preview"` (or [later versions](https://bintray.com/unity/unity/com.unity.properties) depending on your Unity version) to your packages file dependencies.
+
+Solution [found in this post](https://forum.unity.com/threads/entity-debugger-feedback.522893/page-3#post-4853669)
